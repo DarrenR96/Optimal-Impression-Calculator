@@ -3,6 +3,21 @@ import numpy as np
 import itertools as its
 
 
+def printStageOnePoss():
+    count = 0
+    for i in possibilityObjectVector:
+        count += 1
+        print(" ------------------------------------ ")
+        print("Impression Vector:" + str(i.impressionVector))
+        print("First Stage Node Selection:" + str(i.firstStageNodes))
+        print("Click possibilites:")
+        for cp in (i.firstClickArrangements):
+            print(cp)
+    print(" ------------------------------------ ")
+    print("Total Stage One Possibilites:" + str(count))
+    print(" ------------------------------------ ")
+
+
 class possibleAssignment:
     def __init__(self, ia, firstNodes, firstClick):
         self.impressionVector = ia
@@ -10,8 +25,10 @@ class possibleAssignment:
         self.firstClickArrangements = firstClick
 
 
-impressions = 3
+impressions = 5
 stages = 2
+initProb = 0.25
+alpha = 0.15
 clickVector = np.array([0, 1])
 
 G = nx.read_edgelist('data_sets/example_network.txt')
@@ -31,10 +48,4 @@ for i in range(1, impressions):
                 possibilityObjectVector.append(
                     possibleAssignment([i, j], [c], clickPossibility))
 
-for i in possibilityObjectVector:
-    print(" ------------------------------------ ")
-    print("Impression Vector:" + str(i.impressionVector))
-    print("First Stage Node Selection:" + str(i.firstStageNodes))
-    print("Click possibilites:")
-    for cp in (i.firstClickArrangements):
-        print(cp)
+printStageOnePoss()
