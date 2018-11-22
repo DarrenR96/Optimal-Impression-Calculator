@@ -4,7 +4,7 @@ Optimal Impression Calculator with G.U.I. for a social media network. Based on t
 
 ## Dependencies
 
-This was created and tested using Python3.7 and using the built in [tkinter library](https://wiki.python.org/moin/TkInter) for the G.U.I.
+This was created and tested using Python3.7 and using the built-in [tkinter library](https://wiki.python.org/moin/TkInter) for the G.U.I.
 
 ---
 
