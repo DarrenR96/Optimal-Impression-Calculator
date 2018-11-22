@@ -1,6 +1,7 @@
 import networkx as nx
 import numpy as np
 import itertools as its
+import operator
 
 alphaVal = 0.15
 initProb = 0.25
@@ -71,19 +72,21 @@ class possibleAssignment:
         for k in self.stageTwoInit:
 
             self.stageTwoPossible.append(stageTwoAssignment(
-                self.stageOneExpectation, k[1], self.neighborNodes[count], self.probDict))
+                self.stageOneExpectation, k[1], self.neighborNodes[count], self.probDict, self.impressionVector))
             count += 1
 
 
 class stageTwoAssignment:
 
-    def __init__(self, sto, clicknodes, neighbor, dictionary):
+    def __init__(self, sto, clicknodes, neighbor, dictionary, iv):
+        self.secondStageExp = 0
+        self.impressionVector = iv
         self.neighborNodesUnify = []
         self.stageOneExpectation = sto
         self.clickedNodes = clicknodes
         self.neighborNodes = neighbor
         self.updatedDict = dictionary.copy()
-        self.updatedDictList = []
+        self.selectedStageTwoNodes = []
         for n in self.neighborNodes:
             for k in n:
                 self.neighborNodesUnify.append(k)
@@ -91,8 +94,6 @@ class stageTwoAssignment:
         # print(self.clickedNodes)
         # print(self.updatedDict)
         # print("-----")
-
-        dictionaryProb = self.updatedDict
 
         for nnu in self.neighborNodesUnify:
             neighborsNNU = list(G.neighbors(nnu))
@@ -103,11 +104,41 @@ class stageTwoAssignment:
                     if neigh == cn:
                         counter += 1
             self.updatedDict[nnu] = 0.25 + alphaVal*(counter/totalFriends)
+        for cn in self.clickedNodes:
+            del self.updatedDict[cn]
 
-        print(dictionaryProb)
-        print(self.clickedNodes)
-        print("-----")
-        # 0.25 + alpha(clicked/All)
+        [n1, n2] = self.impressionVector
+        self.sortedClicks = sorted(self.updatedDict.items(),
+                                   key=operator.itemgetter(1), reverse=True)
+        self.clickPossibility = list(its.product(clickVector, repeat=n2))
+        list2 = []
+        for i in range(0, n2):
+            list2.append(self.sortedClicks[i])
+        self.selectedStageTwoNodes.append(list2)
+        rowTotal = 0
+        self.flattened = []
+        for sublist in self.selectedStageTwoNodes:
+            for val in sublist:
+                self.flattened.append(val)
+        print(self.flattened)
+        for cp in self.clickPossibility:
+            rowCounter = 0
+            oneCounter = 0
+            product = 1
+            for i in cp:
+                if i == 1:
+                    product = product * self.flattened[rowCounter][1]
+                    oneCounter += 1
+                    pass
+                if i == 0:
+                    product = product * (1-self.flattened[rowCounter][1])
+
+                    pass
+                rowCounter += 1
+            rowTotal = oneCounter*product
+            self.secondStageExp += rowTotal
+        print(self.secondStageExp)
+        # Row Sum
 
 
 impressions = 5
@@ -131,4 +162,4 @@ for i in range(1, impressions):
                 possibilityObjectVector.append(
                     possibleAssignment([i, j], c, clickPossibility))
 
-possibilityObjectVector[10].stageTwoExpectation()
+possibilityObjectVector[100].stageTwoExpectation()
