@@ -12,8 +12,6 @@ NetworkX is needed. Find more about NetworkX for python [here](https://networkx.
 
 Matplotlib is also needed to visualize networks. Find out about installation instructions [here](https://matplotlib.org/users/installing.html).
 
-Itertools is also used to perform some combinatorial calculations. Find more about it [here](https://docs.python.org/3/library/itertools.html).
-
 [Numpy](http://www.numpy.org/) & [Itertools](https://docs.python.org/3/library/itertools.html) were also used to do some _fancy_ calculations
 
 ---
